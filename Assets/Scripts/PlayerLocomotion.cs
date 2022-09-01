@@ -41,7 +41,8 @@ namespace CB_DarkSouls
             inputHandler.TickInput(delta);
             HandleMovement(delta);
             HandleRollingAndSprinting(delta);
-            
+            HandleTwerk(delta);
+
         }
 
         #region Movement
@@ -125,6 +126,18 @@ namespace CB_DarkSouls
                     //play back dodge animation
                     animatorHandler.PlayTargetAnimation("Backstep", true);
                 }
+            }
+        }
+
+        public void HandleTwerk(float delta)
+        {
+            if (animatorHandler.anim.GetBool("isInteracting"))
+                return;
+
+            // if button been pressed
+            if(inputHandler.twerkFlag)
+            {
+                animatorHandler.PlayTargetAnimation("Twerk", true);
             }
         }
         #endregion

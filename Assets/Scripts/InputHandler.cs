@@ -14,8 +14,10 @@ namespace CB_DarkSouls
         public float mouseY;
 
         public bool b_Input;
+        public bool t_Input;
 
         public bool rollFlag;
+        public bool twerkFlag;
         public bool isInteracting;
 
         PlayerControls inputActions;
@@ -66,6 +68,7 @@ namespace CB_DarkSouls
         {
             MoveInput(delta);
             HandleRollingInput(delta);
+            HandleTwerkInput(delta);
         }
 
         // function to map input values
@@ -87,6 +90,17 @@ namespace CB_DarkSouls
             if(b_Input)
             {
                 rollFlag = true;
+            }
+        }
+
+        private void HandleTwerkInput(float delta)
+        {
+            //detect when key is pressed & turn bool to true by checking InputActions
+            t_Input = inputActions.PlayerActions.Dance.phase == UnityEngine.InputSystem.InputActionPhase.Started;
+
+            if (t_Input)
+            {
+                twerkFlag = true;
             }
         }
     }
