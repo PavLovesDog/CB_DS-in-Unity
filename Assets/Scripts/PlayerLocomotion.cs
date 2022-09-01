@@ -43,7 +43,7 @@ namespace CB_DarkSouls
             moveDirection = cameraObject.forward * inputHandler.vertical;
             moveDirection += cameraObject.right * inputHandler.horizontal;
             moveDirection.Normalize();
-            moveDirection.y = moveDirection.y; // ensure no change in y-axis, unless directly affected upon
+            moveDirection.y = 0; // this\ll need to be changed for jumping...
 
             float speed = movementSpeed;
             moveDirection *= speed;
