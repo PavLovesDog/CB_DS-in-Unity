@@ -303,6 +303,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   anim: {fileID: 0}
+  inputHandler: {fileID: 0}
+  playerLocomotion: {fileID: 0}
   canRotate: 1
 --- !u!95 &106078452
 Animator:
@@ -571,6 +573,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   anim: {fileID: 0}
+  inputHandler: {fileID: 0}
+  playerLocomotion: {fileID: 0}
   canRotate: 1
 --- !u!4 &413111794 stripped
 Transform:
@@ -1198,7 +1202,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   m_LocalRotation: {x: 0.08681806, y: -0, z: -0, w: 0.9962242}
-  m_LocalPosition: {x: 0.35, y: 1.96, z: -3.74}
+  m_LocalPosition: {x: 0.35, y: -0.03, z: -4.09}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1786241940}
@@ -1274,6 +1278,7 @@ GameObject:
   - component: {fileID: 1117211538}
   - component: {fileID: 1117211537}
   - component: {fileID: 1117211536}
+  - component: {fileID: 1117211540}
   m_Layer: 10
   m_Name: Player
   m_TagString: Untagged
@@ -1334,6 +1339,9 @@ MonoBehaviour:
   moveAmount: 0
   mouseX: 0
   mouseY: 0
+  b_Input: 0
+  rollFlag: 0
+  isInteracting: 0
 --- !u!54 &1117211538
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1364,6 +1372,18 @@ CapsuleCollider:
   m_Height: 1.9
   m_Direction: 1
   m_Center: {x: 0, y: 0.9, z: 0}
+--- !u!114 &1117211540
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1117211534}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 722a160a5533a2b44806afa86ce50b62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1119717000 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1323216691796681749, guid: d89d18388d4da574394d39de17d87de6, type: 3}
@@ -1516,6 +1536,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   anim: {fileID: 0}
+  inputHandler: {fileID: 0}
+  playerLocomotion: {fileID: 0}
   canRotate: 0
 --- !u!1 &1558662501
 GameObject:
@@ -1668,6 +1690,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   anim: {fileID: 0}
+  inputHandler: {fileID: 0}
+  playerLocomotion: {fileID: 0}
   canRotate: 1
 --- !u!1001 &1694752134
 PrefabInstance:

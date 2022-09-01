@@ -13,6 +13,11 @@ namespace CB_DarkSouls
         public float mouseX;
         public float mouseY;
 
+        public bool b_Input;
+
+        public bool rollFlag;
+        public bool isInteracting;
+
         PlayerControls inputActions;
         CameraHandler cameraHandler;
 
@@ -24,6 +29,7 @@ namespace CB_DarkSouls
             cameraHandler = CameraHandler.singleton;
         }
 
+        // Fixed update controls Camera Follow operations
         private void FixedUpdate()
         {
             float delta = Time.fixedDeltaTime;
@@ -55,10 +61,11 @@ namespace CB_DarkSouls
             inputActions.Disable();
         }
 
-        //??
+        //recieve input data consistentaly
         public void TickInput(float delta)
         {
             MoveInput(delta);
+            HandleRollingInput(delta);
         }
 
         // function to map input values
@@ -70,6 +77,17 @@ namespace CB_DarkSouls
             mouseX = cameraInput.x;
             mouseY = cameraInput.y;
 
+        }
+
+        private void HandleRollingInput(float delta)
+        {
+            //detect when key is pressed & turn bool to true
+            b_Input = inputActions.PlayerActions.Roll.phase == UnityEngine.InputSystem.InputActionPhase.Started;
+
+            if(b_Input)
+            {
+                rollFlag = true;
+            }
         }
     }
 }

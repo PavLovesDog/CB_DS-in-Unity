@@ -7,6 +7,8 @@ namespace CB_DarkSouls
     public class AnimatorHandler : MonoBehaviour
     {
         public Animator anim;
+        public InputHandler inputHandler;
+        public PlayerLocomotion playerLocomotion;
         int vertical;
         int horizontal;
         public bool canRotate;
@@ -14,6 +16,8 @@ namespace CB_DarkSouls
         public void Initialize()
         {
             anim = GetComponent<Animator>();
+            inputHandler = GetComponentInParent<InputHandler>();
+            playerLocomotion = GetComponentInParent<PlayerLocomotion>();
             vertical = Animator.StringToHash("Vertical");
             horizontal = Animator.StringToHash("Horizontal");
         }
@@ -76,6 +80,13 @@ namespace CB_DarkSouls
             anim.SetFloat(horizontal, h, 0.1f, Time.deltaTime);
         }
 
+        public void PlayTargetAnimation(string targetAnim, bool isInteracting)
+        {
+            anim.applyRootMotion = isInteracting; // animation will only play if bool set to true
+            anim.SetBool("isInteracting", isInteracting);
+            anim.CrossFade(targetAnim, 0.2f); // crossfade for smoother transitions
+        }
+
         public void CanRotate()
         {
             canRotate = true;
@@ -84,6 +95,21 @@ namespace CB_DarkSouls
         public void StopRotation()
         {
             canRotate = false;
+        }
+        
+        public void OnAnimatorMove()
+        {
+            //dont run codew below if its not interacting
+            if (inputHandler.isInteracting == false)
+                return;
+
+            // readjust our player model to the centre of its game object after roll animation
+            float delta = Time.deltaTime;
+            playerLocomotion.rigidbody.drag = 0;
+            Vector3 deltaPosition = anim.deltaPosition;
+            deltaPosition.y = 0;
+            Vector3 velocity = deltaPosition / delta;
+            playerLocomotion.rigidbody.velocity = velocity;
         }
 
     }
