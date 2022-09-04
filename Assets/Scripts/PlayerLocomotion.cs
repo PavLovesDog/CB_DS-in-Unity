@@ -22,7 +22,11 @@ namespace CB_DarkSouls
         [SerializeField]
         float movementSpeed = 5.0f;
         [SerializeField]
+        float sprintSpeed = 7.0f;
+        [SerializeField]
         float rotationSpeed = 10.0f;
+
+        public bool isSprinting;
 
         void Start()
         {
@@ -38,6 +42,7 @@ namespace CB_DarkSouls
         {
             float delta = Time.deltaTime;
 
+            isSprinting = inputHandler.b_Input; // whenever you hold 'b' button, sprinting will be true, otherwise false
             inputHandler.TickInput(delta);
             HandleMovement(delta);
             HandleRollingAndSprinting(delta);
@@ -76,6 +81,10 @@ namespace CB_DarkSouls
 
         public void HandleMovement(float delta)
         {
+            // cannot interrupt rolls with added movement
+            if (inputHandler.rollFlag)
+                return;
+
             //assign movement from input Handler
             moveDirection = cameraObject.forward * inputHandler.vertical;
             moveDirection += cameraObject.right * inputHandler.horizontal;
@@ -83,13 +92,23 @@ namespace CB_DarkSouls
             moveDirection.y = 0; // this\ll need to be changed for jumping...
 
             float speed = movementSpeed;
-            moveDirection *= speed;
+
+            if(inputHandler.sprintFlag)
+            {
+                speed = sprintSpeed;
+                isSprinting = true;
+                moveDirection *= speed;
+            }
+            else
+            {
+                moveDirection *= speed;
+            }
 
             //set movement along plane
             Vector3 projectedVelocity = Vector3.ProjectOnPlane(moveDirection, normalVector);
             rigidbody.velocity = projectedVelocity;
 
-            animatorHandler.UpdateAnimatorValues(inputHandler.moveAmount, 0);
+            animatorHandler.UpdateAnimatorValues(inputHandler.moveAmount, 0, isSprinting);
 
             // check for rotation
             if (animatorHandler.canRotate)

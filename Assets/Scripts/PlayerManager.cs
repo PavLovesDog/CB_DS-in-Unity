@@ -20,7 +20,7 @@ namespace CB_DarkSouls
             inputHandler.isInteracting = anim.GetBool("isInteracting");
             inputHandler.rollFlag = false; // reset flagfs for animations
             inputHandler.twerkFlag = false;//     "  "        "   "
+            inputHandler.sprintFlag = false;
         }
-    
     }
 }
