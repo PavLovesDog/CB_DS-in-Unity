@@ -6,15 +6,17 @@ namespace CB_DarkSouls
 {
     public class AnimatorHandler : MonoBehaviour
     {
+        PlayerManager playerManager;
         public Animator anim;
-        public InputHandler inputHandler;
-        public PlayerLocomotion playerLocomotion;
+        InputHandler inputHandler;
+        PlayerLocomotion playerLocomotion;
         int vertical;
         int horizontal;
         public bool canRotate;
 
         public void Initialize()
         {
+            playerManager = GetComponentInParent<PlayerManager>();
             anim = GetComponent<Animator>();
             inputHandler = GetComponentInParent<InputHandler>();
             playerLocomotion = GetComponentInParent<PlayerLocomotion>();
@@ -106,7 +108,7 @@ namespace CB_DarkSouls
         public void OnAnimatorMove()
         {
             //dont run codew below if its not interacting
-            if (inputHandler.isInteracting == false)
+            if (playerManager.isInteracting == false)
                 return;
 
             // readjust our player model to the centre of its game object after roll animation

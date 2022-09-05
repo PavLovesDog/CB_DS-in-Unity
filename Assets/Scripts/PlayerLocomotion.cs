@@ -6,9 +6,10 @@ namespace CB_DarkSouls
 {
     public class PlayerLocomotion : MonoBehaviour
     {
+        PlayerManager playerManager;
         Transform cameraObject;
         InputHandler inputHandler;
-        Vector3 moveDirection;
+        public Vector3 moveDirection;
 
         [HideInInspector]
         public Transform myTransform;
@@ -18,36 +19,43 @@ namespace CB_DarkSouls
         public new Rigidbody rigidbody;
         public GameObject normalCamera;
 
-        [Header("Stats")]
+        [Header("Ground & Aire Detection Stats")]
+        [SerializeField]
+        float groundDetectionRayStartPoint = 0.5f; // beginning of raycast
+        [SerializeField]
+        float minimumDistanceNeededToBeginFall = 1f; // distance needed for player fall animation to start
+        [SerializeField]
+        float groundDirectionRayDistance = 0.2f; // offset raycast distance, if needed
+        LayerMask ignoreForGroundCheck;
+        public float inAirTimer;
+
+        [Header("Movement Stats")]
         [SerializeField]
         float movementSpeed = 5.0f;
+        [SerializeField]
+        float walkingSpeed = 1f;
         [SerializeField]
         float sprintSpeed = 7.0f;
         [SerializeField]
         float rotationSpeed = 10.0f;
+        [SerializeField]
+        float fallingSpeed = 45f;
 
-        public bool isSprinting;
+
 
         void Start()
         {
+            playerManager = GetComponent<PlayerManager>();
             rigidbody = GetComponent<Rigidbody>();
             inputHandler = GetComponent<InputHandler>();
             animatorHandler = GetComponentInChildren<AnimatorHandler>();
             cameraObject = Camera.main.transform;
             myTransform = transform;
             animatorHandler.Initialize();
-        }
 
-        public void Update()
-        {
-            float delta = Time.deltaTime;
-
-            isSprinting = inputHandler.b_Input; // whenever you hold 'b' button, sprinting will be true, otherwise false
-            inputHandler.TickInput(delta);
-            HandleMovement(delta);
-            HandleRollingAndSprinting(delta);
-            HandleTwerk(delta);
-
+            //start player on ground upon startup
+            playerManager.isGrounded = true;
+            ignoreForGroundCheck = ~(1 << 8 | 1 << 11);
         }
 
         #region Movement
@@ -85,6 +93,10 @@ namespace CB_DarkSouls
             if (inputHandler.rollFlag)
                 return;
 
+            //// cant move if falling
+            //if (playerManager.isInteracting)
+            //    return;
+
             //assign movement from input Handler
             moveDirection = cameraObject.forward * inputHandler.vertical;
             moveDirection += cameraObject.right * inputHandler.horizontal;
@@ -96,7 +108,7 @@ namespace CB_DarkSouls
             if(inputHandler.sprintFlag)
             {
                 speed = sprintSpeed;
-                isSprinting = true;
+                playerManager.isSprinting = true;
                 moveDirection *= speed;
             }
             else
@@ -108,7 +120,7 @@ namespace CB_DarkSouls
             Vector3 projectedVelocity = Vector3.ProjectOnPlane(moveDirection, normalVector);
             rigidbody.velocity = projectedVelocity;
 
-            animatorHandler.UpdateAnimatorValues(inputHandler.moveAmount, 0, isSprinting);
+            animatorHandler.UpdateAnimatorValues(inputHandler.moveAmount, 0, playerManager.isSprinting);
 
             // check for rotation
             if (animatorHandler.canRotate)
@@ -157,6 +169,95 @@ namespace CB_DarkSouls
             if(inputHandler.twerkFlag)
             {
                 animatorHandler.PlayTargetAnimation("Twerk", true);
+            }
+        }
+
+        public void HandleFalling(float delta, Vector3 moveDirection)
+        {
+            playerManager.isGrounded = false;
+            RaycastHit hit;
+            Vector3 origin = myTransform.position;
+            origin.y += groundDetectionRayStartPoint; // start ray at base of player collider
+
+            // if raycast jits something directly infront, your not moving
+            if (Physics.Raycast(origin, myTransform.forward, out hit, 0.04f))
+            {
+                moveDirection = Vector3.zero;
+            }
+
+            if(playerManager.isInAir)
+            {
+                rigidbody.AddForce(-Vector3.up * fallingSpeed); // make player fall at rate of falling spoeed
+                rigidbody.AddForce(moveDirection * fallingSpeed / 10f); //OPTIONAL: if walk of ledge, it pushes you off a little so players don't get stuck
+            }
+
+            Vector3 dir = moveDirection;
+            dir.Normalize();
+            origin = origin + dir * groundDirectionRayDistance;
+
+            targetPosition = myTransform.position;
+
+            // draw ray for debugging
+            Debug.DrawRay(origin, -Vector3.up * minimumDistanceNeededToBeginFall, Color.red, 0.1f, false);
+            if(Physics.Raycast(origin, -Vector3.up, out hit, minimumDistanceNeededToBeginFall, ignoreForGroundCheck))
+            {
+                normalVector = hit.normal;
+                Vector3 tp = hit.point;
+                playerManager.isGrounded = true;
+                targetPosition.y = tp.y; // if ray comes out and hits something, we are grounded
+
+                if(playerManager.isInAir)
+                {
+                    // if fell for alloted time
+                    if(inAirTimer > 0.5f)
+                    {
+                        Debug.Log("you were in the air for " + inAirTimer);
+                        animatorHandler.PlayTargetAnimation("Land", true); // play animation
+                    }
+                    else
+                    {
+                        animatorHandler.PlayTargetAnimation("Locomotion", false);
+                        inAirTimer = 0;
+                    }
+
+                    playerManager.isInAir = false;
+                }
+            }
+            else
+            {
+                // if then player leaves ground, switch bool
+                if(playerManager.isGrounded)
+                {
+                    playerManager.isGrounded = false;
+                }
+
+                //if wern't in air, play falling animation and reset bool
+                if (playerManager.isInAir == false)
+                {
+                    if(playerManager.isInteracting == false)
+                    {
+                        animatorHandler.PlayTargetAnimation("Falling", true);
+                    }
+
+                    // get current velocity
+                    Vector3 vel = rigidbody.velocity;
+                    vel.Normalize();
+                    rigidbody.velocity = vel * (movementSpeed / 2);
+                    playerManager.isInAir = true;
+
+                }
+            }
+
+            if (playerManager.isGrounded)
+            {
+                if(playerManager.isInteracting || inputHandler.moveAmount > 0)
+                {
+                    myTransform.position = Vector3.Lerp(myTransform.position, targetPosition, Time.deltaTime);
+                }
+                else
+                {
+                    myTransform.position = targetPosition;
+                }
             }
         }
         #endregion
