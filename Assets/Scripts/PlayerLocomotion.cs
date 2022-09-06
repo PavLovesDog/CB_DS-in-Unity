@@ -40,6 +40,10 @@ namespace CB_DarkSouls
         float rotationSpeed = 10.0f;
         [SerializeField]
         float fallingSpeed = 45f;
+        [SerializeField] // this varible abd below doesn't really need to be shown in editor..
+        float fallVelocity;
+        [SerializeField]
+        float gravityIntesity = 9.8f;
 
 
 
@@ -56,6 +60,8 @@ namespace CB_DarkSouls
             //start player on ground upon startup
             playerManager.isGrounded = true;
             ignoreForGroundCheck = ~(1 << 8 | 1 << 11);
+            fallVelocity = fallingSpeed; // set up fall speed variable
+
         }
 
         #region Movement
@@ -187,8 +193,11 @@ namespace CB_DarkSouls
 
             if(playerManager.isInAir)
             {
-                rigidbody.AddForce(-Vector3.up * fallingSpeed); // make player fall at rate of falling spoeed
-                rigidbody.AddForce(moveDirection * fallingSpeed / 10f); //OPTIONAL: if walk of ledge, it pushes you off a little so players don't get stuck
+                //fallVelocity = fallingSpeed;
+                //fallVelocity += (Time.deltaTime * gravityIntesity); // increse fall rate
+                fallVelocity += delta * gravityIntesity; // increse fall rate
+                rigidbody.AddForce((-Vector3.up * fallVelocity) + moveDirection); // make player fall at rate of falling spoeed
+                rigidbody.AddForce(moveDirection.normalized * 4f, ForceMode.Impulse); //OPTIONAL: if walk of ledge, it pushes you off a little so players don't get stuck
             }
 
             Vector3 dir = moveDirection;
@@ -209,10 +218,11 @@ namespace CB_DarkSouls
                 if(playerManager.isInAir)
                 {
                     // if fell for alloted time
-                    if(inAirTimer > 0.5f)
+                    if(inAirTimer > 0.15f)
                     {
                         Debug.Log("you were in the air for " + inAirTimer);
                         animatorHandler.PlayTargetAnimation("Land", true); // play animation
+                        inAirTimer = 0;
                     }
                     else
                     {
@@ -221,6 +231,7 @@ namespace CB_DarkSouls
                     }
 
                     playerManager.isInAir = false;
+                    fallVelocity = fallingSpeed; // reset fall velocity for next fall
                 }
             }
             else
