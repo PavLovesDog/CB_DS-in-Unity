@@ -245,7 +245,8 @@ namespace CB_DarkSouls
                 //if wern't in air, play falling animation and reset bool
                 if (playerManager.isInAir == false)
                 {
-                    if(playerManager.isInteracting == false)
+                    // Allow for rolling off ledges. i.e finish roll animation before falling animation begins 
+                    if(playerManager.isInteracting == false && !inputHandler.rollFlag) 
                     {
                         animatorHandler.PlayTargetAnimation("Falling", true);
                     }
