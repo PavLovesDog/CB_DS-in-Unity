@@ -150,9 +150,13 @@ namespace CB_DarkSouls
                 //if you have any movement at all when roll button is pressed
                 if(inputHandler.moveAmount > 0)
                 {
+
                     // play target animation Roll in dirtection of movemtm
                     animatorHandler.PlayTargetAnimation("Rolling", true);
                     moveDirection.y = 0; // not flying up or down
+
+                    // bounce player upwards a little 
+                    //rigidbody.AddForce((Vector3.up * walkingSpeed) + (moveDirection.normalized * 4f), ForceMode.Impulse);
 
                     // rotate into direction we are rolling
                     Quaternion rollRotation = Quaternion.LookRotation(moveDirection);
