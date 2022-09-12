@@ -63,7 +63,7 @@ namespace CB_DarkSouls
             inputHandler.rollFlag = false; // reset flagfs for animations
             inputHandler.twerkFlag = false;//     "  "        "   "
             inputHandler.sprintFlag = false;
-            isSprinting = inputHandler.b_Input; // whenever you hold 'b' button, sprinting will be true, otherwise false
+            //isSprinting = inputHandler.b_Input; // whenever you hold 'b' button, sprinting will be true, otherwise false
 
             // increment inAirTimer if player is in the Air
             if(isInAir)
