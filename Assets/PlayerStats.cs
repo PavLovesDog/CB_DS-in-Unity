@@ -47,6 +47,15 @@ namespace CB_DarkSouls
             healthBar.SetCurrentHealth(currentHealth);
 
             animatorHandler.PlayTargetAnimation("Damage_01", true);
+
+            //Handle death
+            if(currentHealth <= 0)
+            {
+                currentHealth = 0;
+                animatorHandler.canRotate = false;
+                animatorHandler.PlayTargetAnimation("Death_01", true);
+                //TODO HANDLE PLAYER DEATH
+            }
         }
     
     }
