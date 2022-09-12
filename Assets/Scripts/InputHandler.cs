@@ -13,8 +13,10 @@ namespace CB_DarkSouls
         public float mouseX;
         public float mouseY;
 
+        public bool t_Input; // random key for dancing
         public bool b_Input;
-        public bool t_Input;
+        public bool rb_Input;
+        public bool rt_Input;
 
         public bool rollFlag;
         public bool twerkFlag;
@@ -23,14 +25,19 @@ namespace CB_DarkSouls
         
 
         PlayerControls inputActions;
-        
+        PlayerAttacker playerAttacker;
+        PlayerInventory playerInventory;
 
         Vector2 movementInput;
         Vector2 cameraInput;
 
-       
+        private void Awake()
+        {
+            playerAttacker = GetComponent<PlayerAttacker>();
+            playerInventory = GetComponent<PlayerInventory>();
+        }
 
-        
+
 
         public void OnEnable()
         {
@@ -58,6 +65,7 @@ namespace CB_DarkSouls
             MoveInput(delta);
             HandleRollingInput(delta);
             HandleTwerkInput(delta);
+            HandleAttackInput(delta);
         }
 
         // function to map input values
@@ -102,6 +110,26 @@ namespace CB_DarkSouls
             {
                 twerkFlag = true;
             }
+        }
+
+        private void HandleAttackInput(float delta)
+        {
+            inputActions.PlayerActions.RBLightAttack.performed += i => rb_Input = true;
+            inputActions.PlayerActions.RTStrongAttack.performed += i => rt_Input = true;
+
+            //RB handles the right hand weapons light attack
+            if(rb_Input)
+            {
+
+                playerAttacker.HandleLightAttack(playerInventory.rightWeapon);
+
+            }
+
+            if(rt_Input)
+            {
+                playerAttacker.HandleHeavyAttack(playerInventory.rightWeapon);
+            }
+
         }
     }
 }

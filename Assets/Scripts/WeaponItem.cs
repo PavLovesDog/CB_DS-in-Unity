@@ -12,6 +12,10 @@ namespace CB_DarkSouls
         public GameObject modelPrefab;
         public bool isUnarmed;
 
+        [Header("On Handed Attack Animations")]
+        public string OH_Light_Attack_1;
+        public string OH_Heavy_Attack_1;
+
     }
     
 }

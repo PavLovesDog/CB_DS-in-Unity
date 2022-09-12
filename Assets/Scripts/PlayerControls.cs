@@ -134,6 +134,22 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""RB - Light Attack"",
+                    ""type"": ""Button"",
+                    ""id"": ""0530dfe5-cd0b-4d83-b2e8-da1b8d77cee8"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""RT - Strong Attack"",
+                    ""type"": ""Button"",
+                    ""id"": ""cad526c8-657d-4ed5-a0e0-d191464fc8e7"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -169,6 +185,50 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""action"": ""Dance"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5df80713-a7fb-4f32-8913-96c32cf0e89a"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RB - Light Attack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5e3ad7e6-f23d-4b3d-a9c1-1e82be82c57f"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RB - Light Attack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""91a2af72-5be4-4d01-a788-fae0bf57ed0e"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RT - Strong Attack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f1acc97d-8e64-458a-9e40-b6ba34a731ce"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RT - Strong Attack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -183,6 +243,8 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         m_PlayerActions = asset.FindActionMap("Player Actions", throwIfNotFound: true);
         m_PlayerActions_Roll = m_PlayerActions.FindAction("Roll", throwIfNotFound: true);
         m_PlayerActions_Dance = m_PlayerActions.FindAction("Dance", throwIfNotFound: true);
+        m_PlayerActions_RBLightAttack = m_PlayerActions.FindAction("RB - Light Attack", throwIfNotFound: true);
+        m_PlayerActions_RTStrongAttack = m_PlayerActions.FindAction("RT - Strong Attack", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -275,12 +337,16 @@ public class @PlayerControls : IInputActionCollection, IDisposable
     private IPlayerActionsActions m_PlayerActionsActionsCallbackInterface;
     private readonly InputAction m_PlayerActions_Roll;
     private readonly InputAction m_PlayerActions_Dance;
+    private readonly InputAction m_PlayerActions_RBLightAttack;
+    private readonly InputAction m_PlayerActions_RTStrongAttack;
     public struct PlayerActionsActions
     {
         private @PlayerControls m_Wrapper;
         public PlayerActionsActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
         public InputAction @Roll => m_Wrapper.m_PlayerActions_Roll;
         public InputAction @Dance => m_Wrapper.m_PlayerActions_Dance;
+        public InputAction @RBLightAttack => m_Wrapper.m_PlayerActions_RBLightAttack;
+        public InputAction @RTStrongAttack => m_Wrapper.m_PlayerActions_RTStrongAttack;
         public InputActionMap Get() { return m_Wrapper.m_PlayerActions; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -296,6 +362,12 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @Dance.started -= m_Wrapper.m_PlayerActionsActionsCallbackInterface.OnDance;
                 @Dance.performed -= m_Wrapper.m_PlayerActionsActionsCallbackInterface.OnDance;
                 @Dance.canceled -= m_Wrapper.m_PlayerActionsActionsCallbackInterface.OnDance;
+                @RBLightAttack.started -= m_Wrapper.m_PlayerActionsActionsCallbackInterface.OnRBLightAttack;
+                @RBLightAttack.performed -= m_Wrapper.m_PlayerActionsActionsCallbackInterface.OnRBLightAttack;
+                @RBLightAttack.canceled -= m_Wrapper.m_PlayerActionsActionsCallbackInterface.OnRBLightAttack;
+                @RTStrongAttack.started -= m_Wrapper.m_PlayerActionsActionsCallbackInterface.OnRTStrongAttack;
+                @RTStrongAttack.performed -= m_Wrapper.m_PlayerActionsActionsCallbackInterface.OnRTStrongAttack;
+                @RTStrongAttack.canceled -= m_Wrapper.m_PlayerActionsActionsCallbackInterface.OnRTStrongAttack;
             }
             m_Wrapper.m_PlayerActionsActionsCallbackInterface = instance;
             if (instance != null)
@@ -306,6 +378,12 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @Dance.started += instance.OnDance;
                 @Dance.performed += instance.OnDance;
                 @Dance.canceled += instance.OnDance;
+                @RBLightAttack.started += instance.OnRBLightAttack;
+                @RBLightAttack.performed += instance.OnRBLightAttack;
+                @RBLightAttack.canceled += instance.OnRBLightAttack;
+                @RTStrongAttack.started += instance.OnRTStrongAttack;
+                @RTStrongAttack.performed += instance.OnRTStrongAttack;
+                @RTStrongAttack.canceled += instance.OnRTStrongAttack;
             }
         }
     }
@@ -319,5 +397,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
     {
         void OnRoll(InputAction.CallbackContext context);
         void OnDance(InputAction.CallbackContext context);
+        void OnRBLightAttack(InputAction.CallbackContext context);
+        void OnRTStrongAttack(InputAction.CallbackContext context);
     }
 }

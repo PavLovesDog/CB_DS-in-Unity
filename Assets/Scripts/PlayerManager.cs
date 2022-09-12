@@ -60,9 +60,11 @@ namespace CB_DarkSouls
         // late update speecifically for resetting flags
         private void LateUpdate()
         {
-            inputHandler.rollFlag = false; // reset flagfs for animations
+            inputHandler.rollFlag = false; // reset flagfs for animations at end of each frame for ONE time register
             inputHandler.twerkFlag = false;//     "  "        "   "
             inputHandler.sprintFlag = false;
+            inputHandler.rb_Input = false;
+            inputHandler.rt_Input = false;
             //isSprinting = inputHandler.b_Input; // whenever you hold 'b' button, sprinting will be true, otherwise false
 
             // increment inAirTimer if player is in the Air
