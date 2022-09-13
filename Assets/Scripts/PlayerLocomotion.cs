@@ -99,9 +99,9 @@ namespace CB_DarkSouls
             if (inputHandler.rollFlag)
                 return;
 
-            //// cant move if falling
-            //if (playerManager.isInteracting)
-            //    return;
+            // cant move if falling
+            if (playerManager.isInteracting)
+                return;
 
             //assign movement from input Handler
             moveDirection = cameraObject.forward * inputHandler.vertical;
@@ -136,6 +136,7 @@ namespace CB_DarkSouls
             rigidbody.velocity = projectedVelocity;
 
             animatorHandler.UpdateAnimatorValues(inputHandler.moveAmount, 0, playerManager.isSprinting);
+
 
             // check for rotation
             if (animatorHandler.canRotate)
@@ -198,8 +199,8 @@ namespace CB_DarkSouls
             Vector3 origin = myTransform.position;
             origin.y += groundDetectionRayStartPoint; // start ray at base of player collider
 
-            // if raycast jits something directly infront, your not moving
-            if (Physics.Raycast(origin, myTransform.forward, out hit, 0.04f))
+            // if raycast hits something directly infront, your not moving
+            if (Physics.Raycast(origin, myTransform.forward, out hit, 0.4f))
             {
                 moveDirection = Vector3.zero;
             }
@@ -221,6 +222,8 @@ namespace CB_DarkSouls
 
             // draw ray for debugging
             Debug.DrawRay(origin, -Vector3.up * minimumDistanceNeededToBeginFall, Color.red, 0.1f, false);
+
+            // ray cast for fall, at moment of ground hit
             if(Physics.Raycast(origin, -Vector3.up, out hit, minimumDistanceNeededToBeginFall, ignoreForGroundCheck))
             {
                 normalVector = hit.normal;
@@ -230,16 +233,16 @@ namespace CB_DarkSouls
 
                 if(playerManager.isInAir)
                 {
-                    // if fell for alloted time
+                    // only play animation if player was in air over this amount
                     if(inAirTimer > 0.15f)
                     {
                         Debug.Log("you were in the air for " + inAirTimer);
                         animatorHandler.PlayTargetAnimation("Land", true); // play animation
                         inAirTimer = 0;
                     }
-                    else
+                    else // return to idle state
                     {
-                        animatorHandler.PlayTargetAnimation("Locomotion", false);
+                        animatorHandler.PlayTargetAnimation("Empty", false);
                         inAirTimer = 0;
                     }
 
@@ -247,7 +250,7 @@ namespace CB_DarkSouls
                     fallVelocity = fallingSpeed; // reset fall velocity for next fall
                 }
             }
-            else
+            else // player still falling
             {
                 // if then player leaves ground, switch bool
                 if(playerManager.isGrounded)
@@ -273,6 +276,18 @@ namespace CB_DarkSouls
                 }
             }
 
+            // if statement to make sure the character model is always heading towards the target desitnation
+            // and not behaving badly when interacting
+            if(playerManager.isInteracting || inputHandler.moveAmount > 0) // if the player is performing an action OR moving at all
+            {
+                myTransform.position = Vector3.Lerp(myTransform.position, targetPosition, Time.deltaTime / 0.1f);
+            }
+            else
+            {
+                myTransform.position = targetPosition;
+            }
+            
+            //Is below needed>??
             if (playerManager.isGrounded)
             {
                 if(playerManager.isInteracting || inputHandler.moveAmount > 0)

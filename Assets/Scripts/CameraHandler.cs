@@ -41,6 +41,7 @@ namespace CB_DarkSouls
             myTransform = transform; // myTransfomr is equal to transform of this game object
             defaultPosition = cameraTransform.localPosition.z;
             ignoreLayers = ~(1 << 8 | 1 << 9 | 1 << 10);
+            targetTransform = FindObjectOfType<PlayerManager>().transform;
             Application.targetFrameRate = 60;
         }
 

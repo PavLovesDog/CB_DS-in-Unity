@@ -42,6 +42,8 @@ GameObject:
   - component: {fileID: 7131793471717779722}
   - component: {fileID: 7131793471714912554}
   - component: {fileID: 7131793471716010986}
+  - component: {fileID: 2905919013559911845}
+  - component: {fileID: 714425302712445813}
   m_Layer: 0
   m_Name: short_sword_Model
   m_TagString: Untagged
@@ -112,6 +114,31 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &2905919013559911845
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7131793471718274346}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2.9027686, y: 0.65487146, z: 0.32596788}
+  m_Center: {x: 1.3969245, y: 0.0033265178, z: -0.0023253092}
+--- !u!114 &714425302712445813
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7131793471718274346}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b53910e8847309c4c954c6eba8c1f316, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7734494802629720701
 GameObject:
   m_ObjectHideFlags: 0

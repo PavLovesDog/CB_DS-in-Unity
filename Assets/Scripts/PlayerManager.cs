@@ -25,7 +25,8 @@ namespace CB_DarkSouls
 
         void Start()
         {
-            cameraHandler = CameraHandler.singleton;
+            //cameraHandler = CameraHandler.singleton;
+            cameraHandler = FindObjectOfType<CameraHandler>(); // note* using FindType assumes there is only ONE camera in scene.
             inputHandler = GetComponent<InputHandler>();
             anim = GetComponentInChildren<Animator>();
             playerLocomotion = GetComponent<PlayerLocomotion>();
