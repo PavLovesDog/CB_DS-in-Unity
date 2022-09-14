@@ -180,15 +180,28 @@ namespace CB_DarkSouls
             }
         }
 
-        public void HandleTwerk(float delta)
+        public void HandleJumpAndDance(float delta, Vector3 moveDirection)
         {
             if (animatorHandler.anim.GetBool("isInteracting"))
                 return;
 
-            // if button been pressed
+            // Dancing
             if(inputHandler.twerkFlag)
             {
                 animatorHandler.PlayTargetAnimation("Twerk", true);
+            }
+
+            // Jumping
+            if(inputHandler.jumpFlag && playerManager.isSprinting)
+            {
+                animatorHandler.PlayTargetAnimation("Jump_Roll", true);
+                inputHandler.jumpFlag = false;
+            }
+            else if(inputHandler.jumpFlag && inputHandler.moveAmount > 0.5)
+            {
+                animatorHandler.PlayTargetAnimation("Jump_Run", true);
+                rigidbody.AddForce(moveDirection.normalized * 5f + Vector3.up * 10f); // ???? not sure if even working
+                inputHandler.jumpFlag = false; // no more jumping
             }
         }
 

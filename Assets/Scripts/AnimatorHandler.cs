@@ -10,6 +10,7 @@ namespace CB_DarkSouls
         public Animator anim;
         InputHandler inputHandler;
         PlayerLocomotion playerLocomotion;
+        Collider playerCollider;
         int vertical;
         int horizontal;
         public bool canRotate;
@@ -17,11 +18,18 @@ namespace CB_DarkSouls
         public void Initialize()
         {
             playerManager = GetComponentInParent<PlayerManager>();
+            playerCollider = GetComponentInParent<Collider>();
             anim = GetComponent<Animator>();
             inputHandler = GetComponentInParent<InputHandler>();
             playerLocomotion = GetComponentInParent<PlayerLocomotion>();
             vertical = Animator.StringToHash("Vertical");
             horizontal = Animator.StringToHash("Horizontal");
+        }
+
+        private void Update()
+        {
+            // tie animator bool to playermanger bool
+            anim.SetBool("isInAir", playerManager.isInAir);
         }
 
         public void UpdateAnimatorValues(float verticalMovement, float horizontalMovement, bool isSprinting)
@@ -104,7 +112,27 @@ namespace CB_DarkSouls
         {
             canRotate = false;
         }
-        
+
+        public void EnableCombo()
+        {
+            anim.SetBool("canDoCombo", true);
+        }
+
+        public void DisableCombo()
+        {
+            anim.SetBool("canDoCombo", false);
+        }
+
+        public void EnablePlayerBoxCollider()
+        {
+            playerCollider.enabled = true;
+        }
+
+        public void DisablePlayerBoxCollider()
+        {
+            playerCollider.enabled = false;
+        }
+
         public void OnAnimatorMove()
         {
             //dont run codew below if its not interacting

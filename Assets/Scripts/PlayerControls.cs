@@ -150,6 +150,14 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Jump"",
+                    ""type"": ""Button"",
+                    ""id"": ""520a585e-7692-4d51-a949-27fd9cde75dc"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -229,6 +237,28 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""action"": ""RT - Strong Attack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""51518ccb-c071-4b7b-b1df-4900816a0a32"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7df2ffb9-33a4-4e06-a1c5-6448ea25f4f8"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -245,6 +275,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         m_PlayerActions_Dance = m_PlayerActions.FindAction("Dance", throwIfNotFound: true);
         m_PlayerActions_RBLightAttack = m_PlayerActions.FindAction("RB - Light Attack", throwIfNotFound: true);
         m_PlayerActions_RTStrongAttack = m_PlayerActions.FindAction("RT - Strong Attack", throwIfNotFound: true);
+        m_PlayerActions_Jump = m_PlayerActions.FindAction("Jump", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -339,6 +370,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
     private readonly InputAction m_PlayerActions_Dance;
     private readonly InputAction m_PlayerActions_RBLightAttack;
     private readonly InputAction m_PlayerActions_RTStrongAttack;
+    private readonly InputAction m_PlayerActions_Jump;
     public struct PlayerActionsActions
     {
         private @PlayerControls m_Wrapper;
@@ -347,6 +379,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         public InputAction @Dance => m_Wrapper.m_PlayerActions_Dance;
         public InputAction @RBLightAttack => m_Wrapper.m_PlayerActions_RBLightAttack;
         public InputAction @RTStrongAttack => m_Wrapper.m_PlayerActions_RTStrongAttack;
+        public InputAction @Jump => m_Wrapper.m_PlayerActions_Jump;
         public InputActionMap Get() { return m_Wrapper.m_PlayerActions; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -368,6 +401,9 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @RTStrongAttack.started -= m_Wrapper.m_PlayerActionsActionsCallbackInterface.OnRTStrongAttack;
                 @RTStrongAttack.performed -= m_Wrapper.m_PlayerActionsActionsCallbackInterface.OnRTStrongAttack;
                 @RTStrongAttack.canceled -= m_Wrapper.m_PlayerActionsActionsCallbackInterface.OnRTStrongAttack;
+                @Jump.started -= m_Wrapper.m_PlayerActionsActionsCallbackInterface.OnJump;
+                @Jump.performed -= m_Wrapper.m_PlayerActionsActionsCallbackInterface.OnJump;
+                @Jump.canceled -= m_Wrapper.m_PlayerActionsActionsCallbackInterface.OnJump;
             }
             m_Wrapper.m_PlayerActionsActionsCallbackInterface = instance;
             if (instance != null)
@@ -384,6 +420,9 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @RTStrongAttack.started += instance.OnRTStrongAttack;
                 @RTStrongAttack.performed += instance.OnRTStrongAttack;
                 @RTStrongAttack.canceled += instance.OnRTStrongAttack;
+                @Jump.started += instance.OnJump;
+                @Jump.performed += instance.OnJump;
+                @Jump.canceled += instance.OnJump;
             }
         }
     }
@@ -399,5 +438,6 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         void OnDance(InputAction.CallbackContext context);
         void OnRBLightAttack(InputAction.CallbackContext context);
         void OnRTStrongAttack(InputAction.CallbackContext context);
+        void OnJump(InputAction.CallbackContext context);
     }
 }

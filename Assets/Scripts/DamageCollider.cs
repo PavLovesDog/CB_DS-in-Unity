@@ -53,6 +53,7 @@ namespace CB_DarkSouls
 
                 if (enemyStats != null) // if there IS a hit with enemy
                 {
+                    if(!enemyStats.isDead)
                     enemyStats.TakeDamage(currentWeaponDamage);
                 }
             }

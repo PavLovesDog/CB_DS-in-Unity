@@ -14,19 +14,23 @@ namespace CB_DarkSouls
         public float mouseY;
 
         public bool t_Input; // random key for dancing
+        public bool e_input;
         public bool b_Input;
         public bool rb_Input;
         public bool rt_Input;
 
         public bool rollFlag;
         public bool twerkFlag;
+        public bool jumpFlag;
         public bool sprintFlag;
+        public bool comboFlag;
         public float rollInputTimer;
         
 
         PlayerControls inputActions;
         PlayerAttacker playerAttacker;
         PlayerInventory playerInventory;
+        PlayerManager playerManager;
 
         Vector2 movementInput;
         Vector2 cameraInput;
@@ -35,9 +39,8 @@ namespace CB_DarkSouls
         {
             playerAttacker = GetComponent<PlayerAttacker>();
             playerInventory = GetComponent<PlayerInventory>();
+            playerManager = GetComponent<PlayerManager>();
         }
-
-
 
         public void OnEnable()
         {
@@ -64,7 +67,7 @@ namespace CB_DarkSouls
         {
             MoveInput(delta);
             HandleRollingInput(delta);
-            HandleTwerkInput(delta);
+            HandleJumpAndDanceInput(delta);
             HandleAttackInput(delta);
         }
 
@@ -101,14 +104,20 @@ namespace CB_DarkSouls
             }
         }
 
-        private void HandleTwerkInput(float delta)
+        private void HandleJumpAndDanceInput(float delta)
         {
             //detect when key is pressed & turn bool to true by checking InputActions
             t_Input = inputActions.PlayerActions.Dance.phase == UnityEngine.InputSystem.InputActionPhase.Started;
+            e_input = inputActions.PlayerActions.Jump.phase == UnityEngine.InputSystem.InputActionPhase.Started;
 
             if (t_Input)
             {
                 twerkFlag = true;
+            }
+
+            if(e_input)
+            {
+                jumpFlag = true;
             }
         }
 
@@ -120,9 +129,19 @@ namespace CB_DarkSouls
             //RB handles the right hand weapons light attack
             if(rb_Input)
             {
-
-                playerAttacker.HandleLightAttack(playerInventory.rightWeapon);
-
+                // handle combo inputs
+                if(playerManager.canDoCombo)
+                {
+                    comboFlag = true;
+                    playerAttacker.HandleWeaponCombo(playerInventory.rightWeapon);
+                    comboFlag = false;
+                }
+                else // not doing combo, regular attack
+                {
+                    if (playerManager.isInteracting) return; // don't play again if attack already happening
+                    if (playerManager.canDoCombo) return; // don't play again if expecting a combo
+                    playerAttacker.HandleLightAttack(playerInventory.rightWeapon);
+                }
             }
 
             if(rt_Input)

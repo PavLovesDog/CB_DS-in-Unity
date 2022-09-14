@@ -9,16 +9,20 @@ namespace CB_DarkSouls
         public int healthLevel = 10;
         public int maxHealth = 10;
         public int currentHealth;
+        public bool isDead;
 
         Animator animator;
+        //Collider collider;
 
         private void Awake()
         {
             animator = GetComponentInChildren<Animator>();
+            //collider = GetComponentInChildren<Collider>();
         }
 
         private void Start()
         {
+            isDead = false;
             maxHealth = SetMaxHealthFromHealthLevel();
             currentHealth = maxHealth;
         }
@@ -40,6 +44,8 @@ namespace CB_DarkSouls
             {
                 currentHealth = 0;
                 animator.Play("Death_01");
+                isDead = true;
+                //collider.enabled = false; // stop colliding ? no more hits
                 //HANDLE ENEMY DEATH
             }
         }

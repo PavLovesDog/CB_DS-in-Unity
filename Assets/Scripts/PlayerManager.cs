@@ -18,6 +18,7 @@ namespace CB_DarkSouls
         public bool isSprinting;
         public bool isInAir;
         public bool isGrounded;
+        public bool canDoCombo;
 
         private void Awake()
         {
@@ -36,13 +37,14 @@ namespace CB_DarkSouls
         {
             float delta = Time.deltaTime;
 
-            // get state of bool from animator state
+            // link bools, get state of bool from animator state
             isInteracting = anim.GetBool("isInteracting");
+            canDoCombo = anim.GetBool("canDoCombo");
             
             inputHandler.TickInput(delta);
             playerLocomotion.HandleMovement(delta);
             playerLocomotion.HandleRollingAndSprinting(delta);
-            playerLocomotion.HandleTwerk(delta);
+            playerLocomotion.HandleJumpAndDance(delta, playerLocomotion.moveDirection);
             playerLocomotion.HandleFalling(delta, playerLocomotion.moveDirection);
         }
 
@@ -64,6 +66,8 @@ namespace CB_DarkSouls
             inputHandler.rollFlag = false; // reset flagfs for animations at end of each frame for ONE time register
             inputHandler.twerkFlag = false;//     "  "        "   "
             inputHandler.sprintFlag = false;
+            inputHandler.jumpFlag = false;
+
             inputHandler.rb_Input = false;
             inputHandler.rt_Input = false;
             //isSprinting = inputHandler.b_Input; // whenever you hold 'b' button, sprinting will be true, otherwise false
