@@ -13,11 +13,16 @@ namespace CB_DarkSouls
         public float mouseX;
         public float mouseY;
 
+        #region Key Input Bools & flags
         public bool t_Input; // random key for dancing
         public bool e_input;
         public bool b_Input;
         public bool rb_Input;
         public bool rt_Input;
+        public bool d_Pad_Up;
+        public bool d_Pad_Down;
+        public bool d_Pad_Left;
+        public bool d_Pad_Right;
 
         public bool rollFlag;
         public bool twerkFlag;
@@ -25,7 +30,8 @@ namespace CB_DarkSouls
         public bool sprintFlag;
         public bool comboFlag;
         public float rollInputTimer;
-        
+        #endregion
+
 
         PlayerControls inputActions;
         PlayerAttacker playerAttacker;
@@ -69,6 +75,7 @@ namespace CB_DarkSouls
             HandleRollingInput(delta);
             HandleJumpAndDanceInput(delta);
             HandleAttackInput(delta);
+            HandleQuickSlotInput();
         }
 
         // function to map input values
@@ -149,6 +156,23 @@ namespace CB_DarkSouls
                 playerAttacker.HandleHeavyAttack(playerInventory.rightWeapon);
             }
 
+        }
+
+        private void HandleQuickSlotInput()
+        {
+            //Map buttons with input manager
+            inputActions.PlayerQuickSlots.DPadRight.performed += i => d_Pad_Right = true;
+            inputActions.PlayerQuickSlots.DPadLeft.performed += i => d_Pad_Left = true;
+
+            //check for presses
+            if (d_Pad_Right)
+            {
+                playerInventory.ChangeRightWeapon();
+            }
+            else if(d_Pad_Left)
+            {
+                playerInventory.ChangeLeftWeapon();
+            }
         }
     }
 }
