@@ -14,9 +14,12 @@ namespace CB_DarkSouls
 
         public Animator animator;
 
+        QuickSlotsUI quickSlotsUI;
+
         private void Awake()
         {
             animator = GetComponent<Animator>();
+            quickSlotsUI = FindObjectOfType<QuickSlotsUI>();
 
             //search player model for weapon holder slots
             WeaponHolderSlot[] weaponHolderSlots = GetComponentsInChildren<WeaponHolderSlot>();
@@ -42,7 +45,7 @@ namespace CB_DarkSouls
             {
                 leftHandSlot.LoadWeaponModel(weaponItem); // load model
                 LoadLeftWeaponDamageCollider(); // load collider
-
+                quickSlotsUI.UpdateWeaponQuickSlotsUI(true, weaponItem);
                 #region Handle Left Weapon Idle Animations
                 //Handle left arm animations
                 if (weaponItem != null && animator.GetFloat("Vertical") < 0.75f)
@@ -60,7 +63,7 @@ namespace CB_DarkSouls
             {
                 rightHandSlot.LoadWeaponModel(weaponItem);
                 LoadRightWeaponDamageCollider();
-
+                quickSlotsUI.UpdateWeaponQuickSlotsUI(false, weaponItem);
                 # region Handle Right Weapon Idle Animations
                 //Handle right arm animations
                 if (weaponItem != null && animator.GetFloat("Vertical") < 0.75f)

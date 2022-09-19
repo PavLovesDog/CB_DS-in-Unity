@@ -44,6 +44,8 @@ namespace CB_DarkSouls
         float fallVelocity;
         [SerializeField]
         float gravityIntesity = 9.8f;
+        [SerializeField]
+        float jumpHeight = 10f;
 
 
 
@@ -200,7 +202,7 @@ namespace CB_DarkSouls
             else if(inputHandler.jumpFlag && inputHandler.moveAmount > 0.5)
             {
                 animatorHandler.PlayTargetAnimation("Jump_Run", true);
-                rigidbody.AddForce(moveDirection.normalized * 5f + Vector3.up * 10f); // ???? not sure if even working
+                //rigidbody.AddForce(/*moveDirection.normalized * 5f + */Vector3.up * jumpHeight, ForceMode.Impulse); // ???? not sure if even working
                 inputHandler.jumpFlag = false; // no more jumping
             }
         }
