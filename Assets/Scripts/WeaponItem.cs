@@ -21,6 +21,11 @@ namespace CB_DarkSouls
         public string OH_Light_Attack_2;
         public string OH_Heavy_Attack_1;
 
+        [Header("Stamina Costs")]
+        public int baseStamina = 0;
+        public float lightAttackMultiplier;
+        public float heavyAttackMultiplier;
+
     }
     
 }

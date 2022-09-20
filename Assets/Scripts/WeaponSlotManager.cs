@@ -12,14 +12,19 @@ namespace CB_DarkSouls
         DamageCollider leftHandDamageCollider; 
         DamageCollider rightHandDamageCollider;
 
+        public WeaponItem attackingWeapon;
+
         public Animator animator;
 
         QuickSlotsUI quickSlotsUI;
+
+        PlayerStats playerStats;
 
         private void Awake()
         {
             animator = GetComponent<Animator>();
             quickSlotsUI = FindObjectOfType<QuickSlotsUI>();
+            playerStats = GetComponentInParent<PlayerStats>();
 
             //search player model for weapon holder slots
             WeaponHolderSlot[] weaponHolderSlots = GetComponentsInChildren<WeaponHolderSlot>();
@@ -109,6 +114,18 @@ namespace CB_DarkSouls
         public void CloseLeftDamageCollider()
         {
             leftHandDamageCollider.DisableDamageCollider();
+        }
+        #endregion
+
+        #region Handle Weapon Stamina Drain
+        public void DrainStaminaLightAttack()
+        {
+            playerStats.TakeStaminadamage(Mathf.RoundToInt(attackingWeapon.baseStamina * attackingWeapon.lightAttackMultiplier));
+        }
+
+        public void DrainStaminaHeavyAttack()
+        {
+            playerStats.TakeStaminadamage(Mathf.RoundToInt(attackingWeapon.baseStamina * attackingWeapon.heavyAttackMultiplier));
         }
         #endregion
     }
