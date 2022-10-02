@@ -51,7 +51,7 @@ namespace CB_DarkSouls
             inputHandler.TickInput(delta);
             playerLocomotion.HandleMovement(delta);
             playerLocomotion.HandleRollingAndSprinting(delta);
-            playerLocomotion.HandleJumpAndDance(delta, playerLocomotion.moveDirection);
+            playerLocomotion.HandleJumpAndDance();
             playerLocomotion.HandleFalling(delta, playerLocomotion.moveDirection);
 
             CheckForInteractableObject(); // constantly check for interactable objeect

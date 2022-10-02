@@ -16,7 +16,7 @@ namespace CB_DarkSouls
         #region Key Input Bools & flags
         public bool a_Input; // interact button
         public bool t_Input; // random key for dancing
-        public bool e_input; // jump
+        public bool y_input; // jump
         public bool b_Input; // sprint/roll/backstep
         public bool rb_Input; // light attack
         public bool rt_Input; // heavy attack
@@ -117,14 +117,14 @@ namespace CB_DarkSouls
         {
             //detect when key is pressed & turn bool to true by checking InputActions
             t_Input = inputActions.PlayerActions.Dance.phase == UnityEngine.InputSystem.InputActionPhase.Started;
-            e_input = inputActions.PlayerActions.Jump.phase == UnityEngine.InputSystem.InputActionPhase.Started;
+            y_input = inputActions.PlayerActions.Jump.phase == UnityEngine.InputSystem.InputActionPhase.Started;
 
             if (t_Input)
             {
                 twerkFlag = true;
             }
 
-            if(e_input)
+            if(y_input)
             {
                 jumpFlag = true;
             }

@@ -182,7 +182,7 @@ namespace CB_DarkSouls
             }
         }
 
-        public void HandleJumpAndDance(float delta, Vector3 moveDirection)
+        public void HandleJumpAndDance()
         {
             if (animatorHandler.anim.GetBool("isInteracting"))
                 return;
@@ -196,12 +196,23 @@ namespace CB_DarkSouls
             // Jumping
             if(inputHandler.jumpFlag && playerManager.isSprinting)
             {
+                moveDirection = cameraObject.forward * inputHandler.vertical;
+                moveDirection += cameraObject.right * inputHandler.horizontal;
                 animatorHandler.PlayTargetAnimation("Jump_Roll", true);
+                moveDirection.y = 0;
+                Quaternion jumpRotation = Quaternion.LookRotation(moveDirection);
+                myTransform.rotation = jumpRotation;
                 inputHandler.jumpFlag = false;
             }
             else if(inputHandler.jumpFlag && inputHandler.moveAmount > 0.5)
             {
+                // use root motion of animation
+                moveDirection = cameraObject.forward * inputHandler.vertical;
+                moveDirection += cameraObject.right * inputHandler.horizontal;
                 animatorHandler.PlayTargetAnimation("Jump_Run", true);
+                moveDirection.y = 0;
+                Quaternion jumpRotation = Quaternion.LookRotation(moveDirection);
+                myTransform.rotation = jumpRotation;
                 //rigidbody.AddForce(/*moveDirection.normalized * 5f + */Vector3.up * jumpHeight, ForceMode.Impulse); // ???? not sure if even working
                 inputHandler.jumpFlag = false; // no more jumping
             }
