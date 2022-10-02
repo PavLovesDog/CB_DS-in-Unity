@@ -11,7 +11,7 @@ namespace CB_DarkSouls
         public Transform cameraPivotTransform; // how the camera swivels
         private Transform myTransform;
         private Vector3 cameraTransformPosition; // position of camera
-        private LayerMask ignoreLayers; // used for camera collision
+        public LayerMask ignoreLayers; // used for camera collision
         private Vector3 cameraFollowVelocity = Vector3.zero;
 
         public static CameraHandler singleton;

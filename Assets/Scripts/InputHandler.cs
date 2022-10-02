@@ -14,12 +14,13 @@ namespace CB_DarkSouls
         public float mouseY;
 
         #region Key Input Bools & flags
+        public bool a_Input; // interact button
         public bool t_Input; // random key for dancing
-        public bool e_input;
-        public bool b_Input;
-        public bool rb_Input;
-        public bool rt_Input;
-        public bool d_Pad_Up;
+        public bool e_input; // jump
+        public bool b_Input; // sprint/roll/backstep
+        public bool rb_Input; // light attack
+        public bool rt_Input; // heavy attack
+        public bool d_Pad_Up; // invetory quickslots
         public bool d_Pad_Down;
         public bool d_Pad_Left;
         public bool d_Pad_Right;
@@ -72,10 +73,11 @@ namespace CB_DarkSouls
         public void TickInput(float delta)
         {
             MoveInput(delta);
-            HandleRollingInput(delta);
+            HandleRollingAndSprintInput(delta);
             HandleJumpAndDanceInput(delta);
             HandleAttackInput(delta);
             HandleQuickSlotInput();
+            HandleInteractingButtonInput();
         }
 
         // function to map input values
@@ -89,7 +91,7 @@ namespace CB_DarkSouls
 
         }
 
-        private void HandleRollingInput(float delta)
+        private void HandleRollingAndSprintInput(float delta)
         {
             //detect when key is pressed & turn bool to true
             b_Input = inputActions.PlayerActions.Roll.phase == UnityEngine.InputSystem.InputActionPhase.Started;
@@ -173,6 +175,14 @@ namespace CB_DarkSouls
             {
                 playerInventory.ChangeLeftWeapon();
             }
+        }
+
+        private void HandleInteractingButtonInput()
+        {
+            // listen for button press and mark true when button is depressed
+            inputActions.PlayerActions.Interact.performed += i => a_Input = true;
+
+
         }
     }
 }

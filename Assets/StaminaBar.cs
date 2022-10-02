@@ -7,11 +7,14 @@ namespace CB_DarkSouls
 {
     public class StaminaBar : MonoBehaviour
     {
+        public PlayerStats playerStats;
         public Slider slider;
         public float regenAmount;
 
+
         private void Start()
         {
+            playerStats = FindObjectOfType<PlayerStats>(); // should only be one..
             slider = GetComponent<Slider>();
         }
 
@@ -28,7 +31,7 @@ namespace CB_DarkSouls
         }
 
         // function which sets the slider display/visibility to the Stamina amount
-        public void SetCurrentStamina(int currentStamina)
+        public void SetCurrentStamina(float currentStamina)
         {
             slider.value = currentStamina;
         }
@@ -36,6 +39,10 @@ namespace CB_DarkSouls
         public void RegenStamina()
         {
             slider.value += regenAmount;
+            if(playerStats.currentStamina < playerStats.maxStamina) // clamp at maxStamina
+            {
+                playerStats.currentStamina += regenAmount;
+            }
         }
     }
 

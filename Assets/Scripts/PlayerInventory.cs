@@ -19,6 +19,9 @@ namespace CB_DarkSouls
         public int currentRightWeaponIndex = -1;
         public int currentLeftWeaponIndex = -1;
 
+        //make weapon inventory
+        public List<WeaponItem> weaponsInventory;
+
         private void Awake()
         {
             weaponSlotManager = GetComponentInChildren<WeaponSlotManager>();

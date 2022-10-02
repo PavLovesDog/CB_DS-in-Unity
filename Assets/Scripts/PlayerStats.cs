@@ -12,7 +12,7 @@ namespace CB_DarkSouls
 
         public int staminaLevel = 10;
         public int maxStamina;
-        public int currentStamina;
+        public float currentStamina;
 
         public HealthBar healthBar;
         public StaminaBar staminaBar;
